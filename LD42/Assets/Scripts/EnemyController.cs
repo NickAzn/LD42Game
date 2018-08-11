@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour {
 
     public GameObject deathObject;
 
-    float selfDestructTimer;
+    //float selfDestructTimer;
 
 	// Update is called once per frame
 	void Update () {
@@ -20,11 +20,12 @@ public class EnemyController : MonoBehaviour {
 
         //Move forwards
         transform.position += transform.up * movementSpeed * Time.deltaTime;
-
+        /*
         selfDestructTimer += Time.deltaTime;
         if (selfDestructTimer > Random.Range(5f, 6f)) {
             Die();
         }
+        */
     }
 
     public void Die() {
