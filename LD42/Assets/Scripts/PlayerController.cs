@@ -9,14 +9,19 @@ public class PlayerController : MonoBehaviour {
     public float maxGridSizeX;
     public float maxGridSizeY;
 
-	// Update is called once per frame
-	void Update () {
+    private Rigidbody2D rb;
+
+    private void Start() {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    void Update () {
         float xMove = Input.GetAxis("Horizontal");
         float yMove = Input.GetAxis("Vertical");
 
-        //Move
-        transform.position += Vector3.right * xMove * movementSpeed * Time.deltaTime;
-        transform.position += Vector3.up * yMove * movementSpeed * Time.deltaTime;
+        //Move using rigidbody
+        rb.velocity = new Vector2(xMove * movementSpeed, yMove * movementSpeed);
 
         Vector3 clampedPosition = new Vector3(
             Mathf.Clamp(transform.position.x, -maxGridSizeX + .45f, maxGridSizeX - .45f),

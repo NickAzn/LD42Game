@@ -20,7 +20,7 @@ public class PlayerAttack : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1")){
             GameObject attackMove = Instantiate(attackHitBox, transform.position, transform.rotation);
-            attackMove.transform.position = transform.position + transform.up;
+            attackMove.transform.position = transform.position + transform.up * .5f;
         }
     }
 }
