@@ -91,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showTime: 0.1
   spriteRenderer: {fileID: 212847033863022956}
-  spawnTime: 1
+  spawnTime: 1.1
 --- !u!212 &212847033863022956
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -126,7 +126,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 8fe51ca8ab147154aaecdabd0e3502d1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -8,22 +8,32 @@ public class EnemyController : MonoBehaviour {
     public float movementSpeed;
 
     public GameObject deathObject;
+    public GameObject deathParticles;
 
     private Rigidbody2D rb;
+
+    public float deathShakeTime;
+    public float deathShakeMag;
+
+    private Vector3 targetOffset;
+    private Vector3 movementTarget;
+
+    public int scoreValue;
 
     //float selfDestructTimer;
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
+        targetOffset = new Vector3(Random.Range(-.5f, .5f), Random.Range(-.5f, .5f), 0);
     }
 
     // Update is called once per frame
     void Update () {
-        
-        //Face the target
-        float z = Mathf.Atan2((target.position.y - transform.position.y), (target.position.x - transform.position.x)) * Mathf.Rad2Deg - 90;
-        transform.eulerAngles = new Vector3(0, 0, z);
+        movementTarget = target.position + targetOffset;
 
+        //Rotate towards target
+        float z = Mathf.Atan2((movementTarget.y - transform.position.y), (movementTarget.x - transform.position.x)) * Mathf.Rad2Deg - 90;
+        transform.eulerAngles = new Vector3(0, 0, z);
         rb.velocity = transform.up * movementSpeed;
 
         Vector3 clampedPosition = new Vector3(
@@ -40,8 +50,12 @@ public class EnemyController : MonoBehaviour {
         */
     }
 
+    //Enemy death
     public void Die() {
-        LevelManager.instance.ScreenShake();
+        LevelManager.instance.ScreenShake(deathShakeTime, deathShakeMag);
+        LevelManager.instance.IncreaseScore(scoreValue);
+        GameObject deathPrt = Instantiate(deathParticles);
+        deathPrt.transform.position = transform.position;
         GameObject deathObj = Instantiate(deathObject);
         deathObj.transform.position = LevelManager.SnapToGrid(transform.position);
         Destroy(gameObject);

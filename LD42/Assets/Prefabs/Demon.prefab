@@ -90,9 +90,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  movementSpeed: 1.5
+  movementSpeed: 2.5
   deathObject: {fileID: 1141961215504700, guid: 49bee669f7c540a43b7803a1079161c8,
     type: 2}
+  deathParticles: {fileID: 1313141776944800, guid: 4b4b6cde2004f714fbf62bb076b02b97,
+    type: 2}
+  deathShakeTime: 0.1
+  deathShakeMag: 0.12
+  scoreValue: 1
 --- !u!212 &212973049169613722
 SpriteRenderer:
   m_ObjectHideFlags: 1

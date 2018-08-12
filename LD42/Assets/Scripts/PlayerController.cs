@@ -21,8 +21,8 @@ public class PlayerController : MonoBehaviour {
         rb.velocity = new Vector2(xMove * movementSpeed, yMove * movementSpeed);
 
         Vector3 clampedPosition = new Vector3(
-            Mathf.Clamp(transform.position.x, -LevelManager.instance.maxGridSizeX + .45f, LevelManager.instance.maxGridSizeX - .45f),
-            Mathf.Clamp(transform.position.y, -LevelManager.instance.maxGridSizeY + .45f, LevelManager.instance.maxGridSizeY - .45f),
+            Mathf.Clamp(transform.position.x, -LevelManager.instance.maxGridSizeX + .5f, LevelManager.instance.maxGridSizeX - .5f),
+            Mathf.Clamp(transform.position.y, -LevelManager.instance.maxGridSizeY + .5f, LevelManager.instance.maxGridSizeY - .5f),
             0);
         transform.position = clampedPosition;
     }
