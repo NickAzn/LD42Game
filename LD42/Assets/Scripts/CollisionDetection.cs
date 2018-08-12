@@ -4,13 +4,37 @@ using UnityEngine;
 
 public class CollisionDetection : MonoBehaviour {
 
-    void OnCollisionEnter(Collision col)
+    public float showTime;
+    public SpriteRenderer spriteRenderer;
+
+    public float spawnTime;
+    bool failedSpawn = false;
+    void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Wall")
         {
-            Vector3 position = new Vector3(Random.Range(-5.5f, 5.5f), Random.Range(-4.5f, 4.5f), 0);
+            if (!failedSpawn) {
+                failedSpawn = true;
+                LevelManager.instance.CheckRandomPos();
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    private void Start() {
+        spriteRenderer.enabled = false;
+    }
+
+    private void Update() {
+        spawnTime -= Time.deltaTime;
+        if (spawnTime < 0) {
+            LevelManager.instance.SummonDemon(transform.position);
             Destroy(gameObject);
-            LevelManager.instance.SummonDemon(position);
+        }
+
+        showTime -= Time.deltaTime;
+        if (showTime < 0) {
+            spriteRenderer.enabled = true;
         }
     }
 }

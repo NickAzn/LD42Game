@@ -20,12 +20,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4704853820029358}
   - component: {fileID: 212847033863022956}
-  - component: {fileID: 114957936130390518}
   - component: {fileID: 58659883985894860}
   - component: {fileID: 50417236245195310}
+  - component: {fileID: 114614769274834802}
   m_Layer: 0
   m_Name: Test Demon
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,29 +77,28 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
---- !u!114 &114957936130390518
+  m_Radius: 0.35
+--- !u!114 &114614769274834802
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1024548429357844}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 907e9d23588fd96448d6059e5c676856, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c7060ac321254344b0e80dc3262c5ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  movementSpeed: 1.5
-  deathObject: {fileID: 1141961215504700, guid: 49bee669f7c540a43b7803a1079161c8,
-    type: 2}
+  showTime: 0.1
+  spriteRenderer: {fileID: 212847033863022956}
+  spawnTime: 1
 --- !u!212 &212847033863022956
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1024548429357844}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -128,7 +127,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 62dc7b56e70bef04082ad38e9abb663a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8fe51ca8ab147154aaecdabd0e3502d1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
