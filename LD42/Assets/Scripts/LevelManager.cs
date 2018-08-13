@@ -9,20 +9,37 @@ public class LevelManager : MonoBehaviour {
     public GameObject enemyDemon;
     public GameObject player;
     public GameObject testDemon;
+    public GameObject testBuff;
+    public GameObject[] buffs;
     public GameObject endScreen;
+    public GameObject startScreen;
     public Shake camShaker;
+
+    public AudioClip mobSpawnSound;
 
     private float nextWaveTime = 0.0f;
     public float period = 5f;
+
+    private float nextBuffTime;
+    public float buffPeriod = 10f;
 
     public float maxGridSizeX;
     public float maxGridSizeY;
 
     public Text scoreText;
     public Text highscoreText;
+    public Text startHighscoreText;
     int score = 0;
 
     Vector3 cameraPos;
+
+    public List<GameObject> Enemies { get; set; }
+    public int startEscapingValue;
+    public GameObject playerExitHitParticle;
+    public GameObject enemySpawnParticle;
+    public GameObject buffSpawnParticle;
+
+    public bool GameStarted { get; private set; }
 
     // Use this for initialization
     public static LevelManager instance;
@@ -31,34 +48,86 @@ public class LevelManager : MonoBehaviour {
 
         cameraPos = camShaker.transform.position;
         endScreen.SetActive(false);
+        startHighscoreText.text = "High Score: " + PlayerPrefs.GetInt("Highscore", 0).ToString();
+        startScreen.SetActive(true);
 
-        Debug.Log((int)-0.5f);
+        Enemies = new List<GameObject>();
+        nextBuffTime = buffPeriod;
+        Time.timeScale = 1f;
+    }
+
+    public void StartGame() {
+        GameStarted = true;
+        startScreen.SetActive(false);
     }
 
     // Update is called once per frame
     void Update() {
-        scoreText.text = score.ToString();
+        if (GameStarted) {
+            scoreText.text = score.ToString();
 
-        nextWaveTime -= Time.deltaTime;
-        if (nextWaveTime <= 0)
-        {
-            nextWaveTime += period;
+            nextWaveTime -= Time.deltaTime;
+            if (nextWaveTime <= 0) {
+                nextWaveTime += period;
 
-            for (int i = 0; i < 3; i++)
-            {
-                CheckRandomPos();
+                for (int i = 0; i < 3; i++) {
+                    CheckRandomPos();
+                }
+
+                if (Enemies.Count >= startEscapingValue) {
+                    foreach (GameObject enemy in Enemies) {
+                        if (enemy != null) {
+                            if (Random.Range(0, 4) == 0)
+                                enemy.GetComponent<EnemyController>().ChannelExit();
+                        }
+                    }
+                }
             }
-        }
-        if (!camShaker.shaking && transform.position != cameraPos) {
-            camShaker.transform.position = cameraPos;
+
+            nextBuffTime -= Time.deltaTime;
+            if (nextBuffTime <= 0) {
+                nextBuffTime += buffPeriod;
+
+                CheckRandomPosBuff();
+            }
+
+            if (!camShaker.shaking && transform.position != cameraPos) {
+                camShaker.transform.position = cameraPos;
+            }
         }
     }
 
-    public void SummonDemon(Vector3 position){
+    public void EnemyDied(GameObject enemyObj) {
+        Enemies.Remove(enemyObj);
+        if (Enemies.Count == startEscapingValue - 1) {
+            foreach (GameObject enemy in Enemies) {
+                if (enemy != null) {
+                    EnemyController ec = enemy.GetComponent<EnemyController>();
+                    if (ec.ChannelingExit)
+                        ec.CancelChannel();
+                }
+            }
+        }
 
+    }
+
+    // Summon a demon at target position
+    public void SummonDemon(Vector3 position){
+        GameObject particles = Instantiate(enemySpawnParticle);
+        particles.transform.position = position;
         GameObject demon = Instantiate(enemyDemon);
         demon.transform.position = position;
         demon.GetComponent<EnemyController>().target = player.GetComponent<Transform>();
+        SoundManager.instance.PlaySoundEffect(mobSpawnSound);
+        Enemies.Add(demon);
+    }
+
+    public void SummonBuff(Vector3 position)
+    {
+        GameObject particles = Instantiate(buffSpawnParticle);
+        particles.transform.position = position;
+        GameObject buff = Instantiate(buffs[Random.Range(0, buffs.Length)]);
+        buff.transform.position = position;
     }
 
     public void CheckRandomPos() {
@@ -66,6 +135,14 @@ public class LevelManager : MonoBehaviour {
         position = SnapToGrid(position);
         GameObject fakeDemon = Instantiate(testDemon);
         fakeDemon.transform.position = position;
+    }
+
+    public void CheckRandomPosBuff()
+    {
+        Vector3 position = new Vector3(Random.Range(-maxGridSizeX + .4f, maxGridSizeX - .4f), Random.Range(-maxGridSizeY + .4f, maxGridSizeY - .4f), 0);
+        position = SnapToGrid(position);
+        GameObject fakeBuff = Instantiate(testBuff);
+        fakeBuff.transform.position = position;
     }
 
     //Snaps given position to a grid position
@@ -121,7 +198,6 @@ public class LevelManager : MonoBehaviour {
 
     //Restarts the game
     public void RestartGame() {
-        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -139,6 +215,20 @@ public class LevelManager : MonoBehaviour {
             highscoreText.text = "New High Score! " + highscore.ToString();
         }
 
+    }
+
+    public void EnemyExitHit() {
+        GameObject exitPrt = Instantiate(playerExitHitParticle);
+        exitPrt.transform.position = player.transform.position;
+        player.GetComponent<PlayerStats>().TakeDamage(1);
+    }
+
+    public void ToggleMusicMute() {
+        SoundManager.instance.MuteMusic();
+    }
+
+    public void ToggleSfxMute() {
+        SoundManager.instance.MuteSfx();
     }
 
 }

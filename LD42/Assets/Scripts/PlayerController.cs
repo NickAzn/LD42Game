@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour {
     void Update () {
         float xMove = Input.GetAxis("Horizontal");
         float yMove = Input.GetAxis("Vertical");
+        if (!LevelManager.instance.GameStarted && (xMove != 0 || yMove != 0))
+            LevelManager.instance.StartGame();
 
         //Move using rigidbody
         rb.velocity = new Vector2(xMove * movementSpeed, yMove * movementSpeed);
